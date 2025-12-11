@@ -1,6 +1,8 @@
-# Tweakio-Whatsapp Library
+# Tweakio-SDK
 
 This repository provides a developer-friendly toolkit for **WhatsApp automation**, with modular components for building pipelines and advanced automation workflows. This library is designed for developers who want to **automate WhatsApp tasks** efficiently and safely, while leveraging modern automation techniques.
+
+Currently Focusing on Whatsapp . Then Arattai then other Famous sites.
 
 ---
 
