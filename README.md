@@ -14,10 +14,11 @@ Whether you are building a smart chatbot, an automated alert system, or a workfl
 ## ✨ Features
 
 *   **🛡️ Anti-Detection First**: Built on **Playwright + Camoufox** to mimic real browser fingerprints.
-*   **🧩 Modular Architecture**: Components like `ChatRoller`, `MessageLoader`, and `BrowserManager` work together or standalone.
+*   **🧩 Modular Architecture**: Components like `ChatRoller`, `MessageProcessor`, and `BrowserManager` work together or standalone.
 *   **🤖 Human-Like Behavior**: Simulates natural typing speeds, mouse movements, and pauses.
-*   **📡 SQLite Integration**: Built-in persistence for message history and state management.
-*   **⚡ Dynamic Selectors**: Smart element detection that adapts to WhatsApp Web UI changes.
+*   **⚡ High-Performance Storage**: **Async Queue-based SQLite** integration for blocking-free message persistence.
+*   **⚖️ Intelligent Rate Limiting**: Built-in protection against number bans via smart request throttling.
+*   **📡 Dynamic Selectors**: Smart element detection that adapts to WhatsApp Web UI changes.
 
 ---
 
@@ -34,11 +35,11 @@ _Currently we are supporting Whatsapp Web but in future we will add more support
 
 ## ⚡ Quick Start
 
-Here is a complete, working example to login and start listening for messages:
+Here is a complete, working example using the latest **MessageProcessor** API:
 
 ```python
 import asyncio
-from tweakio_whatsapp import BrowserManager, WhatsappLogin, MessageLoader, ChatLoader
+from tweakio_whatsapp import BrowserManager, WhatsappLogin, MessageProcessor, ChatLoader
 
 
 async def main():
@@ -50,28 +51,27 @@ async def main():
     wp_login = WhatsappLogin(page=page)
     await wp_login.login()
 
-    # 3️⃣ Start Message Loader & Chat Loader
-    loader = MessageLoader(page=page)
+    # 3️⃣ Start Message Processor & Chat Loader
+    # MessageProcessor handles rate limiting and async storage automatically
+    processor = MessageProcessor(page=page)
     chat_loader = ChatLoader(page=page)
 
     print("🚀 Listening for messages...")
 
-    # 4️⃣ Iterate through chats and fetch messages
+    # 4️⃣ Iterate through chats and process messages
     async for chat, name in chat_loader.ChatRoller(cycle=1, MaxChat=3):
         print(f"📂 Checking Chat: {name}")
 
-        async for msg, text, success, data in loader.LiveMessages(
-                chat=chat,
-                cycle=3  # Check for 3 cycles of live updates
-        ):
-            print(f"   📩 New Message: {text}")
+        messages = await processor.MessageFetcher(chat=chat)
+        for msg in messages:
+            print(f"   📩 New Message: {msg.text} (Direction: {msg.Direction})")
 
 
 if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-> **💡 Pro Tip:** Check `test/play.py` in the repository for a more advanced example including chat navigation!
+> **💡 Pro Tip:** Check `test/play.py` in the repository for more advanced examples!
 
 ---
 
@@ -81,8 +81,8 @@ if __name__ == "__main__":
 | :--- | :--- |
 | **BrowserManager** | Handles browser creation, fingerprinting, and proxy management. |
 | **WhastappLogin** | Manages QR scanning, session saving, and login verification. |
-| **MessageLoader** | Fetches historical and live messages with duplicate protection. |
-| **Storage** | SQLite wrapper for efficient message storage and retrieval. |
+| **MessageProcessor** | Fetches, traces, and filters messages with built-in rate limiting. |
+| **Storage** | Async queue-powered SQLite wrapper for efficient persistence. |
 | **ChatRoller** | Automates scrolling and loading old chats. |
 
 ---
@@ -102,6 +102,12 @@ We welcome contributions! If you have ideas for new features or bug fixes:
 ## 📄 License
 
 Distributed under the MIT License. See `LICENSE` for more information.
+
+---
+
+## 🛠️ Performance & Safety Note
+
+Tweakio-SDK v0.1.2+ uses an **Async SQL Writer**. This means database operations never block your main automation loop, ensuring maximum responsiveness even during heavy message bursts.
 
 ---
 

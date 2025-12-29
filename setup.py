@@ -2,8 +2,8 @@ from setuptools import setup, find_packages
 
 setup(
     name="tweakio-SDK",
-    version="0.1.1",
-    description="A powerful Multi-Platform automation SDK using Playwright and Camoufox. Currently supporting for whatsapp",
+    version="0.1.2",
+    description="High-performance, anti-detection WhatsApp automation SDK. Features async SQLite storage, rate limiting, and human-like interaction loops.",
     author="Rohit",
     author_email="",  # Update with actual email if known, else leave blank or placeholder
     packages=find_packages(),

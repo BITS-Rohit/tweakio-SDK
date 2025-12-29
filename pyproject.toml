@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tweakio-SDK"
-version = "0.1.1"
-description = "A powerful Multi-Platform automation SDK using Playwright and Camoufox. Currently supporting for whatsapp"
+version = "0.1.2"
+description = "High-performance, anti-detection WhatsApp automation SDK. Features async SQLite storage, rate limiting, and human-like interaction loops."
 readme = "README.md"
 requires-python = ">=3.8"
 license = {text = "MIT"}
