@@ -42,10 +42,9 @@ class Storage:
                         jid TEXT,
                         message TEXT,
                         sender TEXT,
-                        time TEXT,
                         systime TEXT,
                         direction TEXT,
-                        type TEXT,
+                        type TEXT
                     );
                     """
             self.conn.execute(query)
@@ -111,8 +110,8 @@ class Storage:
 
             Insert_Query = """
                            INSERT OR IGNORE INTO messages 
-                (data_id, chat, community, jid, message, sender, time, systime, direction, type)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                (data_id, chat, community, jid, message, sender, systime, direction, type)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                            """
 
             self.conn.executemany(Insert_Query, prepared_rows)
